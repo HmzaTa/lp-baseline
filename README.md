@@ -41,10 +41,6 @@ Create a `.env` file in the project root:
 GROQ_API_KEY=gsk_your_key_here
 ```
 
-No quotes, no spaces. The key is loaded automatically at runtime via `python-dotenv`.
-
-> `.env` is listed in `.gitignore` and will never be pushed to GitHub.
-
 ---
 
 ## Running the pipeline
@@ -64,7 +60,7 @@ Custom output directory:
 py -3.14 main.py --dataset OptiBench_Linear_Only.json --output-dir my_results
 ```
 
-> **Note:** The Groq free tier has a daily limit of 100,000 tokens. With 422 problems averaging ~237 tokens each, you can safely evaluate ~100 problems per day. Use `--limit 100` to stay within the cap.
+
 
 ---
 
