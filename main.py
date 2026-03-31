@@ -21,7 +21,7 @@ The LAST key in "results" is conventionally the overall objective
 All other keys are individual variable / sub-result values.
 
 Usage:
-    GROQ_API_KEY=<your_key> python main.py [--dataset OptiBench_Linear_Only.json]
+    OPENROUTER_API_KEY=<your_key> python main.py [--dataset OptiBench_Linear_Only.json]
 """
 
 import argparse

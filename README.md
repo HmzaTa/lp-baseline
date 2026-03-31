@@ -1,6 +1,6 @@
 # LP Baseline Evaluation Pipeline
 
-A clean, modular baseline that evaluates how well an LLM (llama-3.3-70b-versatile via Groq) can convert natural language linear programming problems into structured models and solve them.
+A clean, modular baseline that evaluates how well an LLM (deepseek/deepseek-r1-distill-llama-70b via Open Router) can convert natural language linear programming problems into structured models and solve them.
 
 Evaluated on the **OptiBench_Linear_Only** dataset — 422 real-world LP problems across two types: `linear-notable` and `linear-table`.
 
@@ -11,7 +11,7 @@ Evaluated on the **OptiBench_Linear_Only** dataset — 422 real-world LP problem
 ```
 Baseline_OptiBench/
 ├── main.py                      # Pipeline orchestrator
-├── llm_client.py                # Groq API calls
+├── llm_client.py                # Open Router API calls
 ├── parser.py                    # JSON validation
 ├── model_builder.py             # JSON → PuLP model
 ├── solver.py                    # PuLP solver wrapper
@@ -33,12 +33,12 @@ Baseline_OptiBench/
 py -3.14 -m pip install -r requirements.txt
 ```
 
-### 2. Set your Groq API key
+### 2. Set your Open Router API key
 
 Create a `.env` file in the project root:
 
 ```
-GROQ_API_KEY=gsk_your_key_here
+OPENROUTER_API_KEY=gsk_your_key_here
 ```
 
 ---
