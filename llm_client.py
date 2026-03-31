@@ -5,7 +5,7 @@ Handles Groq API calls to generate LP JSON from problem text.
 
 import os
 import json
-from groq import Groq
+from openai import OpenAI
 
 # ── Schema shown to the LLM ────────────────────────────────────────────────
 SCHEMA = """
@@ -64,17 +64,16 @@ Problem:
 
 
 def generate_lp_json(problem_text: str) -> dict | None:
-    """
-    Send problem_text to the LLM and return the parsed JSON dict.
-    Returns None if the API call fails or the response is not valid JSON.
-    """
-    client = Groq(api_key=os.environ["GROQ_API_KEY"])
+    client = OpenAI(
+        base_url="https://openrouter.ai/api/v1",
+        api_key=os.environ["OPENROUTER_API_KEY"],
+    )
 
     prompt = PROMPT_TEMPLATE.format(schema=SCHEMA, problem_text=problem_text)
 
     try:
         response = client.chat.completions.create(
-            model="llama-3.3-70b-versatile",
+            model="deepseek/deepseek-r1-distill-llama-70b:free",
             messages=[{"role": "user", "content": prompt}],
             temperature=0,
         )

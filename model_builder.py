@@ -1,15 +1,23 @@
 """
 model_builder.py
-Converts a validated LP JSON dict into a PuLP model.
-Falls back gracefully — raises ValueError on unrecoverable issues.
+Converts a validated LP/MILP JSON dict into a PuLP model.
+Supports continuous, integer, and binary variable types.
 """
 
 import pulp
 
 
-def build_model(lp_dict: dict) -> pulp.LpProblem:
+# Mapping from JSON type strings to PuLP categories
+VAR_TYPE_MAP = {
+    "continuous": "Continuous",
+    "integer":    "Integer",
+    "binary":     "Integer",   # PuLP handles binary as Integer with lb=0, ub=1
+}
+
+
+def build_model(lp_dict: dict) -> tuple[pulp.LpProblem, dict]:
     """
-    Build and return a PuLP LpProblem from the structured LP dict.
+    Build and return a PuLP LpProblem from the structured LP/MILP dict.
     """
     sense = (
         pulp.LpMinimize
@@ -22,19 +30,28 @@ def build_model(lp_dict: dict) -> pulp.LpProblem:
     # ── Variables ────────────────────────────────────────────────────────────
     var_map: dict[str, pulp.LpVariable] = {}
     for v in lp_dict["variables"]:
-        name = v["name"]
-        lb = v.get("lb")
-        ub = v.get("ub")
+        name  = v["name"]
+        lb    = v.get("lb")
+        ub    = v.get("ub")
+        vtype = v.get("type", "continuous").lower()
 
         # Default lb = 0 when null/missing
         if lb is None:
             lb = 0
 
+        # Binary variables are always bounded [0, 1]
+        if vtype == "binary":
+            lb = 0
+            ub = 1
+
+        # Get PuLP category, default to Continuous if unknown type
+        cat = VAR_TYPE_MAP.get(vtype, "Continuous")
+
         var_map[name] = pulp.LpVariable(
             name=name,
             lowBound=lb,
-            upBound=ub,  # None means unbounded above
-            cat="Continuous",
+            upBound=ub,
+            cat=cat,
         )
 
     # ── Objective ────────────────────────────────────────────────────────────
