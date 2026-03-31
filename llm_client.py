@@ -1,6 +1,6 @@
 """
 llm_client.py
-Handles Groq API calls to generate LP JSON from problem text.
+Handles OPENROUTER API calls to generate LP JSON from problem text.
 """
 
 import os
